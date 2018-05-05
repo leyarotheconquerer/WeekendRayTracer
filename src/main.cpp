@@ -33,6 +33,44 @@ namespace WeekendRayTracer
 			return (1.0 - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0);
 		}
 	}
+
+	hitable* random_scene(std::vector<hitable*>& hitables, std::vector<material*>& materials) {
+		int n = 500;
+		materials.push_back(new lambertian(vec3(0.5, 0.5, 0.5)));
+		hitables.push_back(new sphere(vec3(0.0, -1000.0, 0.0), 1000, materials.back()));
+		int val = 5;
+		for (int a = -val; a < val; ++a)
+		{
+			for (int b = -val; b < val; ++b)
+			{
+				float choose_mat = rand();
+				vec3 center(a + 0.9 * rand(), 0.2, b + 0.9*rand());
+				if ((center - vec3(4.0, 0.2, 0)).length() > 0.9)
+				{
+					if (choose_mat < 0.95)
+					{
+						materials.push_back(new lambertian(vec3(rand() * rand(), rand() * rand(), rand() * rand())));
+					}
+					else if (choose_mat < 0.95)
+					{
+						materials.push_back(new metal(vec3(0.5 * (1 + rand()), 0.5*(1 + rand()), 0.5 * (1 + rand())), 0.5 * rand()));
+					}
+					else
+					{
+						materials.push_back(new dialectric(1.5));
+					}
+					hitables.push_back(new sphere(center, 0.2, materials.back()));
+				}
+			}
+		}
+		materials.push_back(new dialectric(1.5));
+		hitables.push_back(new sphere(vec3(0, 1, 0), 1.0, materials.back()));
+		materials.push_back(new lambertian(vec3(0.4, 0.2, 0.1)));
+		hitables.push_back(new sphere(vec3(-4, 1, 0), 1.0, materials.back()));
+		materials.push_back(new metal(vec3(0.7, 0.6, 0.5), 0.0));
+		hitables.push_back(new sphere(vec3(4, 1, 0), 1.0, materials.back()));
+		return new hitable_list(hitables);
+	}
 }
 
 using namespace WeekendRayTracer;
@@ -40,25 +78,20 @@ using namespace std;
 
 int main()
 {
-	int nx = 200;
-	int ny = 100;
+	int nx = 800;
+	int ny = 600;
 	int ns = 100;
 	cout << "P3\n" << nx << " " << ny << "\n255\n";
 	vector<material*> materials = {
-		new lambertian(vec3(0.8, 0.3, 0.3)),
-		new lambertian(vec3(0.8, 0.8, 0.0)),
-		new metal(vec3(0.8, 0.6, 0.2), 0.3),
-		new dialectric(1.5)
 	};
 	vector<hitable*> list = {
-		new sphere(vec3(0.0, 0.0, -1.0), 0.5, materials[0]),
-		new sphere(vec3(0.0, -100.5, -1.0), 100, materials[1]),
-		new sphere(vec3(1.0, 0.0, -1.0), 0.5, materials[2]),
-		new sphere(vec3(-1.0, 0.0, -1.0), 0.5, materials[3]),
-		new sphere(vec3(-1.0, 0.0, -1.0), -0.45, materials[3]),
 	};
-	hitable* world = new hitable_list(list);
-	camera cam(vec3(-2.0, 2.0, 1.0), vec3(0.0, 0.0, -1.0), vec3(0.0, 1.0, 0.0), 90, float(nx) / float(ny));
+	hitable* world = random_scene(list, materials);
+	vec3 lookfrom(11.0, 2.0, 2.5);
+	vec3 lookat(0.0, 0.25, -1.0);
+	float dist_to_focus = (lookfrom - lookat).length();
+	float aperature = 0.0;
+	camera cam(lookfrom, lookat, vec3(0.0, 1.0, 0.0), 20, float(nx) / float(ny), aperature, dist_to_focus);
 	for (int y = ny - 1; y >= 0; --y)
 	{
 		for (int x = 0; x < nx; ++x)

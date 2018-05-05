@@ -11,6 +11,14 @@ namespace WeekendRayTracer
 		return rand(seed);
 	}
 
+	vec3 random_in_unit_disc() {
+		vec3 p;
+		do {
+			p = 2.0 * vec3(rand(), rand(), 0) - vec3(1.0, 1.0, 0);
+		} while (dot(p, p) >= 1.0);
+		return p;
+	}
+
 	vec3 random_in_unit_sphere() {
 		vec3 p;
 		do {
