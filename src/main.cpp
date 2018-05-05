@@ -6,6 +6,7 @@
 #include "hitable_list.h"
 #include "lambertian.h"
 #include "metal.h"
+#include "dialectric.h"
 #include "util.h"
 
 namespace WeekendRayTracer
@@ -47,13 +48,14 @@ int main()
 		new lambertian(vec3(0.8, 0.3, 0.3)),
 		new lambertian(vec3(0.8, 0.8, 0.0)),
 		new metal(vec3(0.8, 0.6, 0.2), 0.3),
-		new metal(vec3(0.8, 0.8, 0.8), 1.0)
+		new dialectric(1.5)
 	};
 	vector<hitable*> list = {
 		new sphere(vec3(0.0, 0.0, -1.0), 0.5, materials[0]),
 		new sphere(vec3(0.0, -100.5, -1.0), 100, materials[1]),
 		new sphere(vec3(1.0, 0.0, -1.0), 0.5, materials[2]),
 		new sphere(vec3(-1.0, 0.0, -1.0), 0.5, materials[3]),
+		new sphere(vec3(-1.0, 0.0, -1.0), -0.45, materials[3]),
 	};
 	hitable* world = new hitable_list(list);
 	camera cam;
