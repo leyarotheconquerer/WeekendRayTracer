@@ -7,11 +7,28 @@
 
 namespace WeekendRayTracer
 {
+	float rand()
+	{
+		static std::random_device device;
+		static std::mt19937 seed(device());
+		static std::uniform_real_distribution<float> rand(0.0, 1.0);
+		return rand(seed);
+	}
+
+	vec3 random_in_unit_sphere() {
+		vec3 p;
+		do {
+			p = 2.0 * vec3(rand(), rand(), rand()) - vec3(1.0, 1.0, 1.0);
+		} while(p.squared_length() >= 1.0);
+		return p;
+	}
+
 	vec3 color(const ray& r, hitable *world) {
 		hit_record rec;
 		if (world->hit(r, 0.0, std::numeric_limits<float>::max(), rec))
 		{
-			return 0.5 * (rec.normal + vec3(1.0f, 1.0f, 1.0f));
+			vec3 target = rec.p + rec.normal + random_in_unit_sphere();
+			return 0.5 * color(ray(rec.p, target - rec.p), world);
 		}
 		else
 		{
@@ -36,9 +53,6 @@ int main()
 	list[1] = new sphere(vec3(0.0, -100.5, -1.0), 100.0);
 	hitable* world = new hitable_list(list);
 	camera cam;
-	random_device device;
-	mt19937 seed(device());
-	uniform_real_distribution<float> rand(0.0, 1.0);
 	for (int y = ny - 1; y >= 0; --y)
 	{
 		for (int x = 0; x < nx; ++x)
@@ -46,8 +60,8 @@ int main()
 			vec3 col(0.0, 0.0, 0.0);
 			for (int s = 0; s < ns; ++s)
 			{
-				float u = (x + rand(seed)) / float(nx);
-				float v = (y + rand(seed)) / float(ny);
+				float u = (x + WeekendRayTracer::rand()) / float(nx);
+				float v = (y + WeekendRayTracer::rand()) / float(ny);
 				ray r = cam.get_ray(u, v);
 				col += color(r, world);
 			}
