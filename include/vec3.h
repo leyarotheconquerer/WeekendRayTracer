@@ -26,19 +26,19 @@ namespace WeekendRayTracer
 		inline float& operator[](int i) { return e[i]; }
 
 		inline vec3& operator+=(const vec3 &v2) {
-			e[0] += v2.x(); e[1] += v2.x(); e[2] += v2.x();
+			e[0] += v2.x(); e[1] += v2.y(); e[2] += v2.z();
 			return *this;
 		}
 		inline vec3& operator-=(const vec3 &v2) {
-			e[0] -= v2.x(); e[1] -= v2.x(); e[2] -= v2.x();
+			e[0] -= v2.x(); e[1] -= v2.y(); e[2] -= v2.z();
 			return *this;
 		}
 		inline vec3& operator*=(const vec3 &v2) {
-			e[0] *= v2.x(); e[1] *= v2.x(); e[2] *= v2.x();
+			e[0] *= v2.x(); e[1] *= v2.y(); e[2] *= v2.z();
 			return *this;
 		}
 		inline vec3& operator/=(const vec3 &v2) {
-			e[0] /= v2.x(); e[1] /= v2.x(); e[2] /= v2.x();
+			e[0] /= v2.x(); e[1] /= v2.y(); e[2] /= v2.z();
 			return *this;
 		}
 		inline vec3& operator*=(const float t) {
