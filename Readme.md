@@ -7,6 +7,8 @@ The weekend ray tracer implements the example given in the book
 It is a simple ray tracer implemented in C++ writing a .ppm image to stdout with the results. The exercise is primarily
 educational, though it also makes a good toy for playing with raytraced spheres.
 
+![Sample Image](Sample.png)
+
 Building
 --------
 
