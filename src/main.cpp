@@ -46,8 +46,8 @@ int main()
 	vector<material*> materials = {
 		new lambertian(vec3(0.8, 0.3, 0.3)),
 		new lambertian(vec3(0.8, 0.8, 0.0)),
-		new metal(vec3(0.8, 0.6, 0.2)),
-		new metal(vec3(0.8, 0.8, 0.8))
+		new metal(vec3(0.8, 0.6, 0.2), 0.3),
+		new metal(vec3(0.8, 0.8, 0.8), 1.0)
 	};
 	vector<hitable*> list = {
 		new sphere(vec3(0.0, 0.0, -1.0), 0.5, materials[0]),
