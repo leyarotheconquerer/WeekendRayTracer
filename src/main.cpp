@@ -44,6 +44,7 @@ int main()
 	int ny = 100;
 	int ns = 100;
 	cout << "P3\n" << nx << " " << ny << "\n255\n";
+	float R = cos(M_PI / 4);
 	vector<material*> materials = {
 		new lambertian(vec3(0.8, 0.3, 0.3)),
 		new lambertian(vec3(0.8, 0.8, 0.0)),
@@ -51,14 +52,14 @@ int main()
 		new dialectric(1.5)
 	};
 	vector<hitable*> list = {
-		new sphere(vec3(0.0, 0.0, -1.0), 0.5, materials[0]),
-		new sphere(vec3(0.0, -100.5, -1.0), 100, materials[1]),
-		new sphere(vec3(1.0, 0.0, -1.0), 0.5, materials[2]),
-		new sphere(vec3(-1.0, 0.0, -1.0), 0.5, materials[3]),
-		new sphere(vec3(-1.0, 0.0, -1.0), -0.45, materials[3]),
+		new sphere(vec3(-R, 0.0, -1.0), R, materials[0]),
+//		new sphere(vec3(0.0, -100.5, -1.0), 100, materials[1]),
+		new sphere(vec3(R, 0.0, -1.0), R, materials[2])
+//		new sphere(vec3(-1.0, 0.0, -1.0), 0.5, materials[3]),
+//		new sphere(vec3(-1.0, 0.0, -1.0), -0.45, materials[3]),
 	};
 	hitable* world = new hitable_list(list);
-	camera cam;
+	camera cam(90, float(nx) / float(ny));
 	for (int y = ny - 1; y >= 0; --y)
 	{
 		for (int x = 0; x < nx; ++x)
