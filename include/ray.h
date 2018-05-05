@@ -1,6 +1,8 @@
 #ifndef WEEKENDRAYTRACER_RAY_H
 #define WEEKENDRAYTRACER_RAY_H
 
+#include "vec3.h"
+
 namespace WeekendRayTracer
 {
 	class ray

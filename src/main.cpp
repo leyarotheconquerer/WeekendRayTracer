@@ -1,5 +1,7 @@
 #include <iostream>
 #include <limits>
+#include <random>
+#include "camera.h"
 #include "sphere.h"
 #include "hitable_list.h"
 
@@ -27,23 +29,29 @@ int main()
 {
 	int nx = 200;
 	int ny = 100;
+	int ns = 100;
 	cout << "P3\n" << nx << " " << ny << "\n255\n";
-	vec3 lower_left_corner(-2.0, -1.0, -1.0);
-	vec3 horizontal(4.0, 0.0, 0.0);
-	vec3 vertical(0.0, 2.0, 0.0);
-	vec3 origin(0.0, 0.0, 0.0);
 	vector<hitable*> list(2);
 	list[0] = new sphere(vec3(0.0, 0.0, -1.0), 0.5);
 	list[1] = new sphere(vec3(0.0, -100.5, -1.0), 100.0);
 	hitable* world = new hitable_list(list);
+	camera cam;
+	random_device device;
+	mt19937 seed(device());
+	uniform_real_distribution<float> rand(0.0, 1.0);
 	for (int y = ny - 1; y >= 0; --y)
 	{
 		for (int x = 0; x < nx; ++x)
 		{
-			float u = float(x) / float(nx);
-			float v = float(y) / float(ny);
-			ray r(origin, lower_left_corner + u * horizontal + v * vertical);
-			vec3 col = color(r, world);
+			vec3 col(0.0, 0.0, 0.0);
+			for (int s = 0; s < ns; ++s)
+			{
+				float u = (x + rand(seed)) / float(nx);
+				float v = (y + rand(seed)) / float(ny);
+				ray r = cam.get_ray(u, v);
+				col += color(r, world);
+			}
+			col /= float(ns);
 			int ir = int(col.r() * 255.99);
 			int ib = int(col.b() * 255.99);
 			int ig = int(col.g() * 255.99);
