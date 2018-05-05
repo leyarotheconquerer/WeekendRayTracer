@@ -10,7 +10,7 @@ namespace WeekendRayTracer
 	{
 	public:
 		sphere() {}
-		sphere(vec3 cen, float r) : center(cen), radius(r) {}
+		sphere(vec3 cen, float r, material* mat) : center(cen), radius(r), mat(mat) {}
 		virtual bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const {
 			vec3 oc = r.origin() - center;
 			float a = dot(r.direction(), r.direction());
@@ -25,6 +25,7 @@ namespace WeekendRayTracer
 					rec.t = temp;
 					rec.p = r.point_at_parameter(rec.t);
 					rec.normal = (rec.p - center) / radius;
+					rec.mat = mat;
 					return true;
 				}
 				temp = (-b + std::sqrt(discriminant)) / a;
@@ -33,6 +34,7 @@ namespace WeekendRayTracer
 					rec.t = temp;
 					rec.p = r.point_at_parameter(rec.t);
 					rec.normal = (rec.p - center) / radius;
+					rec.mat = mat;
 					return true;
 				}
 			}
@@ -41,6 +43,7 @@ namespace WeekendRayTracer
 
 		vec3 center;
 		float radius;
+		material* mat;
 	};
 }
 
